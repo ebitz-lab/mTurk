@@ -1,8 +1,0 @@
-participants.db
-.DS_Store
-server.log
-.psiturk_history
-.venv/
-__pycache__/
-pturkenv/
-custom.pyc
