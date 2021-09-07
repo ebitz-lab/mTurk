@@ -1,0 +1,541 @@
+<!doctype html>
+<html>
+    
+    <head>
+        <meta charset="utf-8" />
+        <title>Psychology Experiment</title>
+        <link rel="icon" href="/static/favicon.ico" />
+
+        <!-- libraries -->
+        <script src="/static/lib/jquery-min.js" type="text/javascript"></script>
+        <script src="/static/lib/underscore-min.js" type="text/javascript"></script>
+        <script src="/static/lib/backbone-min.js" type="text/javascript"></script>
+        <script src="/static/lib/snapsvg-min.js" type="text/javascript"></script>
+        <script src="/static/lib/bootstrap-min.js" type="text/javascript"></script>
+        <script src="/static/lib/d3.v3.min.js" type="text/javascript"> </script>
+
+        <script src="/static/js/jspsych/jspsych.js" type="text/javascript"></script>
+        <script src="/static/js/jspsych/plugins/jspsych-text.js" type="text/javascript"></script>
+        <script src="/static/js/jspsych/plugins/multi-choice-circle.js" type="text/javascript"></script>
+        <script src="/static/js/jspsych/plugins/multi-choice-instructions.js" type="text/javascript"></script>
+        <script src="/static/js/jspsych/plugins/jspsych-call-function.js" type="text/javascript"></script>
+        <script src="/static/js/jspsych/plugins/jspsych-survey-multi-choice.js" type="text/javascript"></script>
+        <script src="/static/js/jspsych/plugins/jspsych-survey-text.js" type="text/javascript"></script>
+
+        <script type="text/javascript">
+            // These fields provided by the psiTurk Server
+            var uniqueId = "{{ uniqueId }}"; // a unique string identifying the worker/task
+            var condition = {{ condition }}; // the condition number
+            var counterbalance = {{ counterbalance }}; // a number indexing counterbalancing conditions
+            var adServerLoc = "{{ adServerLoc }}"; // the location of your ad (so you can send user back at end of experiment)
+            var mode = "{{ mode }}"; // is this running live, sandbox, or in debug mode?
+        </script>
+        
+        <!-- utils.js and psiturk.js provide the basic psiturk functionality -->
+        <script src="/static/js/utils.js" type="text/javascript"></script>
+        <script src="/static/js/psiturk.js" type="text/javascript"></script>
+        
+        <link rel="stylesheet" href="/static/css/jspsych.css" type="text/css"></link>
+    </head>
+    
+    <body>
+        <div id="jspsych-target"></div>
+    </body>
+    <script type="text/javascript">
+
+        /* load psiturk */
+        var psiturk = new PsiTurk(uniqueId, adServerLoc, mode);
+
+        psiturk.taskdata.get('uniqueId')
+
+        /* text blocks */
+
+        var welcome_1 = {
+            text: "<p><big><big><strong>Welcome to the experiment!</strong></big></big></p>" +
+            "<p>In this experiment, you are going to see <b>three decks of playing cards</b>.</p>" +
+            "<p><em>Press any key to continue.</em></p>"
+        };
+
+        var welcome_2 = {
+            text: "<p><big><big><strong>Welcome to the experiment!</strong></big></big></p>" +
+            "<p>In this experiment, you are going to see three decks of playing cards.</p>" +
+            "<p>Your goal is to <b>choose cards</b> from the best deck.</p>" +
+            "<p><em>Press any key to continue.</em></p>"
+        };
+
+        var welcome_3 = {
+            text: "<p><big><big><strong>Welcome to the experiment!</strong></big></big></p>" +
+            "<p>In this experiment, you are going to see three decks of playing cards.</p>" +
+            "<p>Your goal is to choose cards from the best deck.</p>" +
+            "<p>The <b>best deck</b> is the one with the <b>most aces</b>.</p>"+
+            "<p><em>Press any key to continue.</em></p>"
+        };
+
+        var welcome_4 = {
+            text: "<p><big><big><strong>Welcome to the experiment!</strong></big></big></p>" +
+            "<p>In this experiment, you are going to see three decks of playing cards.</p>" +
+            "<p>Your goal is to choose cards from the best deck.</p>" +
+            "<p>The best deck is the one with the most aces.</p>"+
+            "<p>Sometimes a deck will be <b>good</b>, with <b>lots of aces</b>.</p>" +
+			"<p><em>Press any key to continue.</em></p>"
+        };
+
+        var welcome_5 = {
+            text: "<p><big><big><strong>Welcome to the experiment!</strong></big></big></p>" +
+            "<p>In this experiment, you are going to see three decks of playing cards.</p>" +
+            "<p>Your goal is to choose cards from the best deck.</p>" +
+            "<p>The best deck is the one with the most aces.</p>"+
+            "<p>Sometimes a deck will be good, with lots of aces.</p>" +
+            "<p>Sometimes a deck will be <b>bad</b>, with very <b>few aces</b>.</p>" +
+            "<p><em>Press any key to continue.</em></p>"
+        };
+
+        var welcome_6 = {
+            text: "<p><big><big><strong>Welcome to the experiment!</strong></big></big></p>" +
+            "<p>In this experiment, you are going to see three decks of playing cards.</p>" +
+            "<p>Your goal is to choose cards from the best deck.</p>" +
+            "<p>The best deck is the one with the most aces.</p>"+
+            "<p>Sometimes a deck will be good, with lots of aces.</p>" +
+            "<p>Sometimes a deck will be bad, with very few aces.</p>" +
+            "<p>The <b>number of aces</b> in each deck <b>will change slowly</b> as you play.</p>"+
+            "<p><em>Press any key to continue.</em></p>"
+        };
+
+        var welcome_7 = {
+            text: "<p><big><big><strong>Welcome to the experiment!</strong></big></big></p>" +
+            "<p>In this experiment, you are going to see three decks of playing cards.</p>" +
+            "<p>Your goal is to choose cards from the best deck.</p>" +
+            "<p>The best deck is the one with the most aces.</p>"+
+            "<p>Sometimes a deck will be good, with lots of aces.</p>" +
+            "<p>Sometimes a deck will be bad, with very few aces.</p>" +
+            "<p>The number of aces in each deck will change slowly as you play.</p>"+
+            "<p>A deck can <b>get better</b> or <b>get worse</b> at any time.</p>" +
+            "<p><em>Press any key to continue.</em></p>"
+        }
+
+        var welcome_8 = {
+            text: "<p><big><big><strong>Welcome to the experiment!</strong></big></big></p>" +
+            "<p>In this experiment, you are going to see three decks of playing cards.</p>" +
+            "<p>Your goal is to choose cards from the best deck.</p>" +
+            "<p>The best deck is the one with the most aces.</p>"+
+            "<p>Sometimes a deck will be good, with lots of aces.</p>" +
+            "<p>Sometimes a deck will be bad, with very few aces.</p>" +
+            "<p>The number of aces in each deck will change slowly as you play.</p>"+
+            "<p>A deck can get better or get worse at any time.</p>" +
+            "<p>You will get <b>1 point for each ace</b> that you find and <b>$0.02</b> for each point.</p>" +
+            "<p><em>Press any key to continue.</em></p>"
+        }
+
+         var welcome_9 = {
+            text: "<p><big><big><strong>Welcome to the experiment!</strong></big></big></p>" +
+            "<p>In this experiment, you are going to see three decks of playing cards.</p>" +
+            "<p>Your goal is to choose cards from the best deck.</p>" +
+            "<p>The best deck is the one with the most aces.</p>"+
+            "<p>Sometimes a deck will be good, with lots of aces.</p>" +
+            "<p>Sometimes a deck will be bad, with very few aces.</p>" +
+            "<p>The number of aces in each deck will change slowly as you play.</p>"+
+            "<p>A deck can get better or get worse at any time.</p>" +
+            "<p>You will get 1 point for each ace that you find and $0.02 for each point.</p>" +
+            "<p>You will earn the most points if you <b>choose the best deck as often as possible</b>.</p>" +
+            "<p><em>Press any key to continue.</em></p>"
+        };
+
+        var welcome_10 = {
+            text: "<p><big><big><strong>Welcome to the experiment!</strong></big></big></p>" +
+            "<p>In this experiment, you are going to see three decks of playing cards.</p>" +
+            "<p>Your goal is to choose cards from the best deck.</p>" +
+            "<p>The best deck is the one with the most aces.</p>"+
+            "<p>Sometimes a deck will be good, with lots of aces.</p>" +
+            "<p>Sometimes a deck will be bad, with very few aces.</p>" +
+            "<p>The number of aces in each deck will change slowly as you play.</p>"+
+            "<p>A deck can get better or get worse at any time.</p>" +
+            "<p>You will get 1 point for each ace that you find and $0.02 for each point.</p>" +
+            "<p>You will earn the most points if you choose the best deck as often as possible.</p>" +
+            "<p><em><b>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; When you are sure you understand these instructions, press any key to continue.</b></em></p>"
+        };
+
+        var welcome_last_1 = {
+            text: "<p>Before you can start earning points, we need to do a <b>quick practice session</b> to make sure you understood the instructions.</p>" +
+            "<p><em>Press any key to continue.</em></p>"
+        };
+
+        var welcome_last_2 = {
+            text: "<p>Before you can start earning points, we need to do a quick practice session to make sure you understood the instructions.</p>" +
+            "<p><b>Practice session points will not go towards your bonus.</b></p>" +
+            "<p><em>Press any key to continue.</em></p>"
+        };
+
+        var welcome_last_3 = {
+            text: "<p>Before you can start earning points, we need to do a quick practice session to make sure you understood the instructions.</p>" +
+            "<p>Practice session points will not go towards your bonus.</p>" +
+            "<p>(But they will determine <strong>whether you are eligible</strong> for the main task.)</p>" +
+            "<p><em>Press any key to continue.</em></p>"
+        };
+
+        var welcome_last_4 = {
+            text: "<p>Before you can start earning points, we need to do a quick practice session to make sure you understood the instructions.</p>" +
+            "<p>Practice session points will not go towards your bonus.</p>" +
+            "<p>(But they will determine whether you are eligible for the main task.)</p>" +
+            "<p><em><b>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; Press any key to begin the practice session!</b></em></p>"
+        };
+
+        var welcome_block = {
+            type: 'text',
+            timeline: [welcome_1,welcome_2,welcome_3,welcome_4,welcome_5,welcome_6,welcome_7,welcome_8,welcome_9,welcome_10,welcome_last_1,welcome_last_2,welcome_last_3,welcome_last_4],
+            conditional_function: function() {
+                var responses = jsPsych.data.getTrialsOfType('survey-multi-choice');
+                if (!responses[0].responses.includes("Under")) {
+                    return true
+                } else {
+                    return false
+                }
+            }
+        }
+
+		/* instructions */
+		var participationThreshold = .42; // see practiceThresholds.m for rationale
+		var switchThreshold = 2; // number of switches req in practice
+		// general info for both the task and the instructions
+        var choiceStr = "choice";
+        var n_choices = 3; // number of options to chose between
+
+        /* task blocks */
+        // task variables:
+        var n_practice_trials = 25; // number of trials to run in practice
+        var n_trials = 300; // number of trials to run in the main task
+        // var min_probability_step = 0.1; // how far to step, if we're stepping
+        var p_step_options = [1, 1, 1, 1]; // options for probability of step/hazard
+        var probability_of_step = p_step_options[condition]; // how often to step
+        var step_size_options = [0.2 0.2 0.2 0.2];
+        var step_size = step_size_options[condition]; // how often to step;
+        var p_reward_bounds = [.1, .9]; // [.1, .9];
+        var stimulus_location = '/static/images/';
+        var iti_opts = [100 250 500 750];
+        var iti_time = iti_opts[condition];
+
+        // save all our initializing variables, in case we need to know what they were later
+        var task_data = {
+            n_trials: n_trials,
+            // min_probability_step: min_probability_step,
+        };
+        // psiturk.recordUnstructuredData(task_data);
+
+        psiturk.recordUnstructuredData('n_trials',n_trials);
+        // psiturk.recordUnstructuredData('min_probability_step',min_probability_step);
+        psiturk.recordUnstructuredData('probability_of_step',probability_of_step);
+        psiturk.recordUnstructuredData('step_size',step_size);
+        psiturk.recordUnstructuredData('p_reward_bounds',p_reward_bounds);
+        psiturk.saveData();
+
+        // generate the Ss' reward structure, can index this as: rewards["choice1"][trialNumber]
+        var reward_structure = {choice0:[], choice1:[], choice2:[]}; // preallocate reward seed array
+        var goTime = false; // put in a flag for when the walks have been generated from the server
+
+        // call the custom route that generates the reward walks
+        $.ajax("gen_walk",{
+            type: "GET",
+            data: {min:p_reward_bounds[0], max:p_reward_bounds[1], hazard:probability_of_step, nTrials:n_trials+n_practice_trials, nPractice:n_practice_trials, nArms:n_choices, stepSize:step_size},
+            async: false,
+            success: function (response) {
+                for(var choice = 0; choice < n_choices; choice++) {
+                    reward_structure[choiceStr.concat(JSON.stringify(choice))] = response[choice];
+                }
+            }
+        });
+
+        // select what stimuli to select
+        var stimuli = [];
+        var deckName = 'back';
+        for(i = 0; i < n_choices; i++){
+            stimuli.push(deckName.concat(JSON.stringify(i)));
+        }
+
+        var outcome_stimuli = ['loss','win'];
+
+        // now go ahead and save this information as well
+        psiturk.recordUnstructuredData('stimuli',stimuli);
+        psiturk.recordUnstructuredData('reward_structure',reward_structure); // need to check this to be sure it saves!
+        psiturk.saveData();
+
+        // now generate a bunch of trial definitions
+        var timeline = new Array(n_trials+n_practice_trials);
+        for (var i = 0; i < n_trials+n_practice_trials; i++) {
+            timeline[i] = {};
+            timeline[i].reward_seed = [reward_structure["choice0"][i],reward_structure["choice1"][i],reward_structure["choice2"][i]];
+        }
+
+        // block definition
+        var task_block = {
+            type: 'multi-choice-circle',
+            set_size: n_choices,
+            circle_diameter: 350,
+            s_type: '.png',
+            s_location: stimulus_location,
+            stimuli: stimuli,
+            outcome_stimuli: outcome_stimuli,
+            all_stimuli_for_preload: [stimuli,outcome_stimuli],
+            fixation_image: '/static/images/fixation.gif',
+            target_offset: 180, // rotation around circle
+            timing_post_trial: iti_time,
+            timeline: timeline.slice(n_practice_trials,n_trials+n_practice_trials),
+            conditional_function: function() {
+                var nSwitches = getNumberOfSwitches("multi-choice-instructions");
+                var nAttempted = getNumberOfTrials("multi-choice-instructions");
+                var nCorrect = getNumberRewarded("multi-choice-instructions");
+                if ((nCorrect/nAttempted) > participationThreshold && nSwitches > switchThreshold) {
+                    return true
+                } else {
+                    return false
+                }
+            }
+        };
+
+        // block definition
+        var practice_block = {
+            type: 'multi-choice-instructions',
+            set_size: n_choices,
+            circle_diameter: 350,
+            s_type: '.png',
+            s_location: stimulus_location,
+            stimuli: stimuli,
+            outcome_stimuli: outcome_stimuli,
+            all_stimuli_for_preload: [stimuli,outcome_stimuli],
+            fixation_image: '/static/images/fixation.gif',
+            target_offset: 180, // rotation around circle
+            timeline: timeline.slice(0,n_practice_trials),
+            timing_post_trial: iti_time,
+            conditional_function: function() {
+                var responses = jsPsych.data.getTrialsOfType('survey-multi-choice');
+                if (!responses[0].responses.includes("Under")) {
+                    return true
+                } else {
+                    return false
+                }
+            }
+        };
+
+        var practice_feedback_block = {
+            type: 'text',
+            text: function() {
+                var responses = jsPsych.data.getTrialsOfType('survey-multi-choice');
+                if (!responses[0].responses.includes("Under")) {
+                    var nSwitches = getNumberOfSwitches("multi-choice-instructions");
+                    var nAttempted = getNumberOfTrials("multi-choice-instructions");
+                    var nCorrect = getNumberRewarded("multi-choice-instructions");
+                    if ((nCorrect/nAttempted) > participationThreshold && nSwitches > switchThreshold) {
+                        return "<p><strong>Great!</strong> You earned <strong>" + nCorrect + " points</strong> (out of <strong>" +
+                        nAttempted + " possible points</strong>).</p>" +
+                        "<p>You're ready to begin the experiment!</p>" +
+                        "<p>Just keep finding the aces so you can earn lots of points." +
+                        "<p>And remember that the best deck will change over time." +
+                        "<p>At the end, we'll give you <strong>$0.02 for each point</strong> you earn!</p>" +
+                        "<p><em>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; Press any key when you're ready to play!</em></p>"
+                    } else {
+                        return "<p><strong>I'm sorry,</strong> you only earned <strong>" + nCorrect + " points</strong> (out of <strong>" + 
+                        nAttempted + " possible points</strong>).</p>" +
+                        "<p>That's not enough points to continue to the full experiment,</p>" +
+                        "<p>but you will still get $0.50 as baseline pay. Thanks for your time." +
+                        "<p><em>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; Press any key to go to the submit screen.</em></p>"
+                    }
+                } else {
+                    return "<p><big><strong>I'm sorry,</strong> you are not qualified to complete this HIT.</big>" +
+                    "<p><em><b>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; Press any key to exit.</b></em></p>"
+                }
+            },
+        };
+
+        var age_options = ["Under 18", "18-24", "25-29", "30-39", "40-49", "50-65","Over 65"];
+        var gender_options = ["Male", "Female", "Other", "Prefer not to say"];
+        // var country_options = ["United States","Other"];
+
+        var pre_survey_block = {
+            type: 'survey-multi-choice',
+            questions: ["Age?","Gender?"],
+            options: [age_options,gender_options],
+            required: [true,true]
+        };
+
+        // var pre_survey_feedback = {
+        //     type: 'text',
+        //     text: function() {
+        //         var responses = jsPsych.data.getTrialsOfType('survey-multi-choice');
+        //         if (responses[0].responses.includes("United") && !responses[0].responses.includes("Under")) {
+        //             return "<p><big><strong>Great!</strong> You are qualified to complete this HIT.</big>" +
+        //             "<p><em><b>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; Press any key to read the instructions.</b></em></p>"
+        //         } else {
+        //             return "<p><big><strong>I'm sorry,</strong> you are not qualified to complete this HIT.</big>" +
+        //             "<p><em><b>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; Press any key to exit.</b></em></p>"
+        //         }
+        //     }
+        // }
+
+        // /* debrief block */
+        // var debrief_block = {
+        //     type: "text",
+        //     text: function() {
+        //         var nAttempted = getNumberOfTrials("multi-choice-instructions");
+        //         var nCorrect = getNumberRewarded("multi-choice-instructions");
+        //         if ((nCorrect/nAttempted) > participationThreshold) {
+        //             return "<p>You earned <strong>" + 
+        //             getNumberRewarded("multi-choice-circle") + " bonus points</strong> (out of <strong>" + 
+        //             getNumberOfTrials("multi-choice-circle") + " possible points</strong>) in the task.</p><p>Press " + 
+        //             "any key to complete the experiment and submit your HIT.</p>" + 
+        //             "<p>Thank you!</p>";
+        //         } else {
+        //             return "<p>Please press any key to end the experiment and submit your HIT.</p>";
+        //         }
+        //     },
+        // };
+
+        var turkInfo = jsPsych.turk.turkInfo();
+
+        var post_survey_trial = {
+            type: 'survey-text',
+            preamble: ["<p><big><strong>Do you want to earn an additional $0.50?</strong></big></p><br>" + 
+            "<p>Please fill out this survey: <a href='https://umn.qualtrics.com/jfe/form/SV_1GnYaU8wbbxUITP' target='_blank'>link</a></p>" + "<p>You will have to <strong>keep this window open</strong> so that you can enter the survey passcode below.</p> <p>We will give you the survey passcode when you finish the survey.</p>" + 
+                "<p>Your worker ID is: " +  turkInfo.workerId + " </p><br>"],
+            questions: ["Survey passcode:"],
+            on_load: function() {
+                psiturk.saveData();
+            }
+        };
+
+        var post_survey_block = {
+            timeline: [post_survey_trial],
+            conditional_function: function() {
+                var responses = jsPsych.data.getTrialsOfType('survey-multi-choice');
+                var nSwitches = getNumberOfSwitches("multi-choice-instructions");
+                var nAttempted = getNumberOfTrials("multi-choice-instructions");
+                var nCorrect = getNumberRewarded("multi-choice-instructions");
+                if (!responses[0].responses.includes("Under") && ((nCorrect/nAttempted) > participationThreshold && nSwitches > switchThreshold)) {
+                    console.log('passed check')
+                    return true
+                } else {
+                    console.log('failed check')
+                    return false
+                }
+            }
+        }
+
+        // save this for us as well
+        psiturk.recordUnstructuredData('total_rewards',getNumberRewarded);
+        psiturk.recordUnstructuredData('total_trials',getNumberOfTrials);
+        psiturk.saveData();
+
+        function getNumberRewarded(trial_type) {
+
+            // console.log('get number rewarded')
+            // console.log(trial_type)
+            var trials = jsPsych.data.getTrialsOfType(trial_type);
+
+            var sum_rewards = 0;
+            for (var i = 0; i < trials.length; i++) {
+                if (trials[i].reward) {
+                    sum_rewards++;
+                }
+            }
+            return sum_rewards
+        }
+
+        function getNumberOfTrials(trial_type) {
+
+            // console.log('get number trials')
+            // console.log(trial_type)
+            var trials = jsPsych.data.getTrialsOfType(trial_type);
+
+            var valid_trial_count = 0;
+            for (var i = 0; i < trials.length; i++) {
+                if (trials[i].correct==1) {
+                    valid_trial_count++;
+                }
+            }
+            return valid_trial_count
+        }
+
+        function getNumberOfSwitches(trial_type) {
+
+            // console.log('get number switches')
+            // console.log(trial_type)
+            var trials = jsPsych.data.getTrialsOfType(trial_type);
+
+            var switch_count = 0;
+            for (var i = 1; i < trials.length; i++) {
+                if (trials[i].choice!=trials[i-1].choice) {
+                    switch_count++;
+                }
+            }
+            return switch_count
+        }
+
+        // /* define experiment structure */
+
+        var experiment_blocks = [];
+        experiment_blocks.push(pre_survey_block);
+        // // experiment_blocks.push(pre_survey_feedback);
+        experiment_blocks.push(welcome_block);
+        experiment_blocks.push(practice_block);
+        experiment_blocks.push(practice_feedback_block);
+        experiment_blocks.push(task_block);
+        experiment_blocks.push(post_survey_block);
+
+        /* start the experiment */
+
+        jsPsych.init({
+            display_element: $('#jspsych-target'),
+            timeline: experiment_blocks,
+            on_finish: function() {
+                psiturk.saveData({
+                    // success: function() { psiturk.completeHIT(); }
+                    success: function(){
+                        // psiturk.taskdata.set('bonus', getNumberRewarded()/100);//, function() { 
+                        psiturk.computeBonus('compute_bonus', function() { 
+                            psiturk.completeHIT(); // when finished saving compute bonus, the quit
+                        });
+                    }, 
+                });
+            },
+            on_data_update: function(data) {
+                psiturk.recordTrialData(data);
+            }
+        });
+
+        // // shuffle function to generate a new shuffled array
+        // function shuffle(arrayIn) {
+        //     var newArray = [];
+        //     //Math.floor(Math.random() * arrayIn.length);
+        //     var arrayWork = arrayIn.slice();
+        //     var j;
+        //     var k = arrayIn.length;
+        //     while (k--){
+        //         j = Math.floor(Math.random() * arrayWork.length);
+        //         newArray.push(arrayWork[j]);
+        //         arrayWork.splice(j,1);
+        //     }
+        //     return newArray;
+        // };
+
+        // deal with spotty internet connections?
+
+    // var error_message = "<h1>Oops!</h1><p>Something went wrong submitting your HIT. This might happen if you lose your internet connection. Press the button to resubmit.</p><button id='resubmit'>Resubmit</button>";
+
+    //     prompt_resubmit = function() {
+    //         document.body.innerHTML = error_message;
+    //         $("#resubmit").click(resubmit);
+    //     };
+
+    //     resubmit = function() {
+    //         document.body.innerHTML = "<h1>Trying to resubmit...</h1>";
+    //         reprompt = setTimeout(prompt_resubmit, 10000);
+            
+    //         psiTurk.saveData({
+    //             success: function() {
+    //                 clearInterval(reprompt); 
+    //                 psiTurk.computeBonus('compute_bonus', function(){finish()}); 
+    //             }, 
+    //             error: prompt_resubmit
+    //         });
+    //     };
+
+    </script>
+
+</html>
